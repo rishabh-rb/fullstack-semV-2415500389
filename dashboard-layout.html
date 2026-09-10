@@ -17,13 +17,11 @@
             background: #f4f6f8;
         }
 
-        /* Main Layout */
         .dashboard {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 220px;
             background: #222;
@@ -48,12 +46,10 @@
             background: #444;
         }
 
-        /* Main Content */
         .main {
             flex: 1;
         }
 
-        /* Navbar */
         .navbar {
             background: white;
             padding: 20px;
@@ -62,12 +58,10 @@
             box-shadow: 0 2px 5px #ddd;
         }
 
-        /* Content */
         .content {
             padding: 25px;
         }
 
-        /* Cards */
         .cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -92,7 +86,6 @@
             font-weight: bold;
         }
 
-        /* Table */
         .table-box {
             background: white;
             margin-top: 25px;
@@ -141,92 +134,98 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h2>My Dashboard</h2>
+            <h2> Dashboard</h2>
 
-            <a href="#">🏠 Home</a>
-            <a href="#">📊 Analytics</a>
-            <a href="#">👤 Users</a>
-            <a href="#">⚙️ Settings</a>
-            <a href="#">🚪 Logout</a>
+            <a href="#"> Dashboard</a>
+            <a href="#"> Users</a>
+            <a href="#"> Products</a>
+            <a href="#"> Orders</a>
+            <a href="#"> Settings</a>
         </aside>
 
 
-        <!-- Main Area -->
         <main class="main">
-
-            <!-- Navbar -->
             <nav class="navbar">
-                <h3>Dashboard</h3>
-                <span>Welcome, User 👋</span>
+                <h3>Dashboard Overview</h3>
+                <span>John Doe</span>
             </nav>
 
 
-            <!-- Content -->
             <section class="content">
 
-                <h1>Overview</h1>
-
-                <!-- Cards -->
                 <div class="cards">
-
                     <div class="card">
                         <h3>Total Users</h3>
                         <p>1,250</p>
                     </div>
-
                     <div class="card">
-                        <h3>Revenue</h3>
-                        <p>₹45,000</p>
+                        <h3>Products</h3>
+                        <p>356</p>
                     </div>
-
                     <div class="card">
                         <h3>Orders</h3>
-                        <p>320</p>
+                        <p>789</p>
                     </div>
-
                     <div class="card">
-                        <h3>Visitors</h3>
-                        <p>8,540</p>
+                        <h3>Revenue</h3>
+                        <p>₹2,45,000</p>
                     </div>
-
                 </div>
 
 
-                <!-- Table -->
                 <div class="table-box">
-
-                    <h2>Recent Users</h2>
-
+                    <h2>Recent Orders</h2>
                     <table>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
                             <th>Status</th>
                         </tr>
 
                         <tr>
-                            <td>Rahul</td>
-                            <td>rahul@gmail.com</td>
-                            <td>Active</td>
-                        </tr>
-
-                        <tr>
+                            <td>#001</td>
                             <td>Aman</td>
-                            <td>aman@gmail.com</td>
-                            <td>Active</td>
+                            <td>20 May 2024</td>
+                            <td>₹1,249</td>
+                            <td>Delivered</td>
+                        </tr>
+                        <tr>
+                            <td>#002</td>
+                            <td>Riya</td>
+                            <td>21 May 2024</td>
+                            <td>₹2,499</td>
+                            <td>Pending</td>
+                        </tr>
+                        <tr>
+                            <td>#003</td>
+                            <td>Vikram</td>
+                            <td>22 May 2024</td>
+                            <td>₹3,999</td>
+                            <td>Shipped</td>
+                        </tr>
+                        <tr>
+                            <td>#004</td>
+                            <td>Neha</td>
+                            <td>23 May 2024</td>
+                            <td>₹1,799</td>
+                            <td>Delivered</td>
+                        </tr>
+                        <tr>
+                            <td>#005</td>
+                            <td>Rohit</td>
+                            <td>24 May 2024</td>
+                            <td>₹2,199</td>
+                            <td>Pending</td>
                         </tr>
 
-                        <tr>
-                            <td>Riya</td>
-                            <td>riya@gmail.com</td>
-                            <td>Inactive</td>
-                        </tr>
                     </table>
 
                 </div>
 
             </section>
-
+<h5 style="text-align: center; padding: 230px;"> &copy; 2024 Technova. All rights reserved.</h5>
         </main>
 
     </div>
