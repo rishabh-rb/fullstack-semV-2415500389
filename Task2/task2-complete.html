@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKart</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #F8FAFC;
+            font-family: Arial;
+        }
+        .navbar {
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            width: 420px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+
+            padding: 0 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Main */
+
+        .container {
+            padding: 25px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            color: #6B7280;
+            font-size: 13px;
+        }
+
+        /* Sidebar + Products */
+
+        .main {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 30px;
+        }
+
+        aside {
+            background: white;
+            padding: 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+        }
+
+        aside h3 {
+            margin-top: 0;
+        }
+
+        aside h4 {
+            margin-bottom: 8px;
+        }
+
+        aside div {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        /* Products */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 15px;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+        }
+
+        .card h3 {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .category {
+            color: #6B7280;
+            font-size: 13px;
+        }
+
+        .rating {
+            color: #F59E0B;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .old {
+            color: #6B7280;
+            font-size: 13px;
+            text-decoration: line-through;
+        }
+
+        .card button {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <img src="https://picsum.photos/48"
+                 style="width:32px;height:32px;border-radius:8px;">
+            ShopKart
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search for products...">
+            🔍
+        </div>
+
+        <div class="nav-icons">
+            <span>🛒</span>
+            <span>♙</span>
+        </div>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <main class="container">
+
+        <div class="breadcrumb">
+            Electronics &nbsp;›&nbsp; Laptops
+        </div>
+
+
+        <div class="main">
+
+            <!-- Sidebar -->
+
+            <aside>
+
+                <h3>Filters</h3>
+
+                <div>
+                    <h4>Category</h4>
+
+                    <input type="checkbox"> Laptops<br>
+                    <input type="checkbox"> Desktops<br>
+                    <input type="checkbox"> Tablets<br>
+                    <input type="checkbox"> Accessories
+                </div>
+
+
+                <div>
+                    <h4>Price Range</h4>
+
+                    <input type="checkbox"> ₹0 - ₹25,000<br>
+                    <input type="checkbox"> ₹25,000 - ₹50,000<br>
+                    <input type="checkbox"> ₹50,000 - ₹75,000<br>
+                    <input type="checkbox"> ₹75,000+
+                </div>
+
+
+                <div>
+                    <h4>Brand</h4>
+
+                    <input type="checkbox"> Dell<br>
+                    <input type="checkbox"> HP<br>
+                    <input type="checkbox"> Lenovo<br>
+                    <input type="checkbox"> Apple
+                </div>
+
+
+                <button>
+                    Apply Filters
+                </button>
+
+            </aside>
+
+
+            <!-- Products -->
+            <div>
+
+                <div style="display:flex;justify-content:space-between;margin-bottom:15px;">
+                    <b>Showing 6 results</b>
+
+                    <select>
+                        <option>Sort by: Popularity</option>
+                        <option>Price: Low to High</option>
+                    </select>
+                </div>
+            
+                <div class="products">
+
+    <!-- 1 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?1">
+        <span class="category">Laptop</span>
+        <h3>Dell Inspiron 15</h3>
+        <div class="rating">★★★★★</div>
+        <div class="price">₹45,990 <span class="old">₹52,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?2">
+        <span class="category">Laptop</span>
+        <h3>HP Pavilion</h3>
+        <div class="rating">★★★★☆</div>
+        <div class="price">₹52,990 <span class="old">₹58,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 3 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?3">
+        <span class="category">Laptop</span>
+        <h3>Lenovo IdeaPad</h3>
+        <div class="rating">★★★★☆</div>
+        <div class="price">₹39,990 <span class="old">₹45,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?4">
+        <span class="category">Laptop</span>
+        <h3>MacBook Air M2</h3>
+        <div class="rating">★★★★★</div>
+        <div class="price">₹90,990 <span class="old">₹99,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 5 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?5">
+        <span class="category">Laptop</span>
+        <h3>ASUS Vivobook</h3>
+        <div class="rating">★★★★☆</div>
+        <div class="price">₹41,990 <span class="old">₹47,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 6 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?6">
+        <span class="category">Laptop</span>
+        <h3>Dell XPS 13</h3>
+        <div class="rating">★★★★★</div>
+        <div class="price">₹84,990 <span class="old">₹92,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 7 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?7">
+        <span class="category">Laptop</span>
+        <h3>HP Envy 13</h3>
+        <div class="rating">★★★★☆</div>
+        <div class="price">₹68,990 <span class="old">₹75,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 8 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?8">
+        <span class="category">Laptop</span>
+        <h3>Lenovo ThinkPad</h3>
+        <div class="rating">★★★★★</div>
+        <div class="price">₹72,990 <span class="old">₹79,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+    <!-- 9 -->
+    <div class="card">
+        <img src="https://picsum.photos/300/200?9">
+        <span class="category">Laptop</span>
+        <h3>Acer Aspire 5</h3>
+        <div class="rating">★★★★☆</div>
+        <div class="price">₹36,990 <span class="old">₹42,990</span></div>
+        <button>Add to Cart</button>
+    </div>
+
+</div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

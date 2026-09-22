@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         .navbar {
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .search-box {
+            width: 420px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 0 12px;
+        }
+        .search-box input {
+            border: none;
+            outline: none;   
+        }
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://picsum.photos/48" alt="Logo" style="width: 32px; height: 32px; border-radius: 8px;">
+            ShopKart
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search for products...">🔍
+        </div>
+        <div class="nav-icons">
+            <span>🛒</span>
+            <span>♙</span>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <div">
+            <span>Electronics</span>
+            &nbsp;›&nbsp;
+            <span>Laptops</span>
+        </div>
+        <div>
+            <aside>
+                <h3>Filters</h3>
+                <div>
+                    <h4>Category</h4>
+                    <label>
+                        <input type="checkbox">
+                        Laptops<br>
+                        <input type="checkbox">
+                        Desktops<br>
+                        <input type="checkbox">
+                        Tablets<br>
+                        <input type="checkbox">
+                        Accessories
+                </div>
+                <div>
+                    <h4>Price Range</h4>
+                    
+                        <input type="checkbox">
+                        ₹0 - ₹25,000<br>
+                        <input type="checkbox">
+                        ₹25,000 - ₹50,000<br>
+                    
+                        <input type="checkbox">
+                        ₹50,000 - ₹75,000<br>
+                    
+                        <input type="checkbox">
+                        ₹75,000+
+                    
+                </div>
+                <div>
+                    <h4>Brand</h4>
+                    
+                        <input type="checkbox">
+                        Dell
+                        <br>
+                        <input type="checkbox">
+                        HP
+                        <br>
+                        <input type="checkbox">
+                        Lenovo
+                        <br>
+                        <input type="checkbox">
+                        Apple
+                </div>
+
+                <button>
+                    Apply Filters
+                </button>
+
+            </aside>
+        </div>
+
+    </main>
+
+</body>
+</html>
