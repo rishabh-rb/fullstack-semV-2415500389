@@ -2,11 +2,11 @@ let arr = [1, 2, 3, 4, 5];
 console.log(arr);
 
 //map
-let newArr = arr.map(num => num * num);
+let newArr = arr.map(n => n * n);
 console.log(newArr);
 
 //filter
-let filteredArr = arr.filter(num => num % 2 === 0);
+let filteredArr = arr.filter(n => n % 2 == 0);
 console.log(filteredArr);
 
 //reduce
@@ -14,18 +14,18 @@ let sum = arr.reduce((acc, num) => acc + num, 0);
 console.log(sum);
 
 //find
-let foundNum = arr.find(num => num > 3);
+let foundNum = arr.find(n => n > 3);
 console.log(foundNum);
 
 //forEach
-arr.forEach(num => console.log(num));
+arr.forEach(n => console.log(n));
 
 //some
-let hasEven = arr.some(num => num % 2 === 0);
+let hasEven = arr.some(n => n % 2 === 0);
 console.log(hasEven);
 
 //every
-let allPositive = arr.every(num => num > 0);
+let allPositive = arr.every(n => n > 0);
 console.log(allPositive);
 
 //sort
@@ -35,3 +35,11 @@ console.log(sortedArr);
 //reverse
 let reversedArr = arr.reverse();
 console.log(reversedArr);
+
+//sum
+let total = arr.reduce((acc, num) => acc + num, 0);
+console.log(total);
+
+//average
+let average = total / arr.length;
+console.log(average);
