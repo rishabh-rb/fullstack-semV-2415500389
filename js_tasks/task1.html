@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Quiz Arena</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f4f6;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #00000015;
+        }
+
+        h1 {
+            color: #4f46e5;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 21px;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .progress-text {
+            color: #4f46e5;
+        }
+
+        .score-text {
+            color: #059669;
+        }
+
+        .timer {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .timer.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 7px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: #4f46e5;
+            transition: width 0.3s;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .option-btn {
+            text-align: left;
+            background: white;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #eef2ff;
+            border-color: #818cf8;
+        }
+
+        .option-btn.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .option-btn.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 1;
+        }
+
+        .explanation {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .secondary-btn {
+            background: #6b7280;
+        }
+
+        .secondary-btn:hover {
+            background: #4b5563;
+        }
+
+        .results-card {
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 45px;
+            font-weight: bold;
+            color: #059669;
+            margin: 20px 0;
+        }
+
+        .rating {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .review-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: left;
+            border-left: 4px solid #ef4444;
+        }
+
+        .review-item h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .review-item p {
+            margin-bottom: 8px;
+        }
+
+        .correct-answer {
+            color: #047857;
+            font-weight: bold;
+        }
+
+        .your-answer {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .top-bar {
+                font-size: 12px;
+            }
+
+            .score-display {
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="quiz-container">
+
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <h1>JS Quiz Arena</h1>
+
+            <p>
+                Welcome to JS Quiz Arena! Test your knowledge with
+                multiple-choice questions. You have 30 seconds for
+                each question. Read carefully and choose the correct answer.
+            </p>
+
+            <p><strong>Questions:</strong> <span id="total-questions"></span></p>
+            <p><strong>Time per question:</strong> 30 seconds</p>
+
+            <button id="start-btn" class="btn">Start Quiz</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hide">
+
+            <div class="top-bar">
+                <span id="progress" class="progress-text">Q 1/3</span>
+                <span id="live-score" class="score-text">Score: 0</span>
+                <span id="timer" class="timer">30s</span>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+
+            <h2 id="question-text"></h2>
+
+            <div class="options-list">
+                <button class="btn option-btn" data-index="0"></button>
+                <button class="btn option-btn" data-index="1"></button>
+                <button class="btn option-btn" data-index="2"></button>
+                <button class="btn option-btn" data-index="3"></button>
+            </div>
+
+            <div id="explanation" class="explanation hide"></div>
+
+            <button id="next-btn" class="btn hide">Next Question</button>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="end-screen" class="results-card hide">
+
+            <h1>Quiz Completed!</h1>
+
+            <p>Here is how you performed:</p>
+
+            <div id="score" class="score-display">0/3</div>
+
+            <p id="rating" class="rating"></p>
+
+            <div class="action-buttons">
+                <button id="review-btn" class="btn">Review Wrong Answers</button>
+                <button id="restart-btn" class="btn secondary-btn">Restart</button>
+            </div>
+        </div>
+
+        <!-- Review Wrong Answers Screen -->
+        <div id="review-screen" class="hide">
+
+            <h1>Review Answers</h1>
+
+            <p>Check the questions you answered incorrectly or missed.</p>
+
+            <div id="review-list"></div>
+
+            <div class="action-buttons">
+                <button id="back-btn" class="btn">View Results</button>
+                <button id="review-restart-btn" class="btn secondary-btn">Restart Quiz</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                correct: 1,
+                explanation: "Mars is called the Red Planet because iron minerals in its soil produce a reddish appearance."
+            },
+            {
+                question: "What is the capital city of France?",
+                options: ["London", "Berlin", "Paris", "Rome"],
+                correct: 2,
+                explanation: "Paris is the capital and largest city of France."
+            },
+            {
+                question: "Which ocean is the largest on Earth?",
+                options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                correct: 3,
+                explanation: "The Pacific Ocean is the largest and deepest ocean on Earth."
+            },
+            {
+                question: "Which language runs directly in a web browser?",
+                options: ["C", "Java", "JavaScript", "Python"],
+                correct: 2,
+                explanation: "JavaScript is natively supported by modern web browsers."
+            },
+            {
+                question: "Which HTML tag is used to create a hyperlink?",
+                options: ["<link>", "<a>", "<href>", "<p>"],
+                correct: 1,
+                explanation: "The <a> tag creates hyperlinks. Its href attribute specifies the destination."
+            },
+            {
+                question: "Which keyword declares a block-scoped variable in JavaScript?",
+                options: ["var", "let", "define", "dim"],
+                correct: 1,
+                explanation: "The let keyword declares a block-scoped variable in JavaScript."
+            },
+            {
+                question: "Which symbol is used for strict equality in JavaScript?",
+                options: ["=", "==", "===", "!="],
+                correct: 2,
+                explanation: "The === operator checks equality without performing type conversion."
+            },
+            {
+                question: "Which CSS property changes text color?",
+                options: ["font-style", "background", "color", "text-size"],
+                correct: 2,
+                explanation: "The CSS color property sets the foreground color of text."
+            },
+            {
+                question: "Which method adds an element to the end of an array?",
+                options: ["pop()", "push()", "shift()", "slice()"],
+                correct: 1,
+                explanation: "The push() method adds one or more elements to the end of an array."
+            },
+            {
+                question: "Which keyword is used to define a function in JavaScript?",
+                options: ["function", "method", "func", "define"],
+                correct: 0,
+                explanation: "The function keyword declares a function in JavaScript."
+            },
+            {
+                question: "What does DOM stand for?",
+                options: [
+                    "Data Object Management",
+                    "Document Object Model",
+                    "Digital Ordinance Model",
+                    "Document Oriented Method"
+                ],
+                correct: 1,
+                explanation: "DOM stands for Document Object Model. It represents a webpage as objects that JavaScript can access and modify."
+            },
+            {
+                question: "Which method selects an element by its ID?",
+                options: [
+                    "getElementsByClassName()",
+                    "queryAll()",
+                    "getElementById()",
+                    "getElement()"
+                ],
+                correct: 2,
+                explanation: "document.getElementById() selects an HTML element using its unique ID."
+            },
+            {
+                question: "Which value represents a Boolean false?",
+                options: ["true", "1", "false", "'hello'"],
+                correct: 2,
+                explanation: "The Boolean value false is written without quotation marks."
+            },
+            {
+                question: "Which loop executes while a condition is true?",
+                options: ["if loop", "while loop", "switch loop", "case loop"],
+                correct: 1,
+                explanation: "A while loop repeats its body as long as its condition evaluates to true."
+            },
+            {
+                question: "Which operator represents logical AND in JavaScript?",
+                options: ["||", "!", "&&", "&"],
+                correct: 2,
+                explanation: "The && operator performs logical AND."
+            },
+            {
+                question: "What does JSON stand for?",
+                options: [
+                    "Java Standard Object Notation",
+                    "JavaScript Object Notation",
+                    "Java Source Open Network",
+                    "JavaScript Online Network"
+                ],
+                correct: 1,
+                explanation: "JSON stands for JavaScript Object Notation, a lightweight data-interchange format."
+            },
+            {
+                question: "Which method converts JSON text into a JavaScript value?",
+                options: [
+                    "JSON.stringify()",
+                    "JSON.parse()",
+                    "JSON.convert()",
+                    "JSON.object()"
+                ],
+                correct: 1,
+                explanation: "JSON.parse() converts valid JSON text into a JavaScript value."
+            },
+            {
+                question: "Which array method removes the last element?",
+                options: ["push()", "shift()", "pop()", "unshift()"],
+                correct: 2,
+                explanation: "The pop() method removes and returns the last element of an array."
+            },
+            {
+                question: "Which event occurs when a user clicks an element?",
+                options: ["hover", "change", "click", "submit"],
+                correct: 2,
+                explanation: "The click event occurs when an element is clicked."
+            },
+            {
+                question: "Which CSS layout system is designed for one-dimensional layouts?",
+                options: ["Flexbox", "Grid", "Float", "Table"],
+                correct: 0,
+                explanation: "Flexbox is designed primarily for one-dimensional layouts along a row or column."
+            },
+            {
+                question: "Which keyword prevents reassignment of a variable binding?",
+                options: ["let", "var", "const", "static"],
+                correct: 2,
+                explanation: "const prevents reassignment of the variable binding, although objects and arrays declared with const can still be modified."
+            },
+            {
+                question: "What does typeof return for a string?",
+                options: ["text", "string", "character", "String"],
+                correct: 1,
+                explanation: "The typeof operator returns the string 'string' for string values."
+            },
+            {
+                question: "Which method runs a function for every array element?",
+                options: ["forEach()", "push()", "join()", "findIndex()"],
+                correct: 0,
+                explanation: "The forEach() method executes a callback function for each array element."
+            },
+            {
+                question: "Which HTML attribute provides alternative text for an image?",
+                options: ["title", "src", "alt", "href"],
+                correct: 2,
+                explanation: "The alt attribute provides alternative text for an image."
+            },
+            {
+                question: "Which method converts a JavaScript object into JSON text?",
+                options: [
+                    "JSON.parse()",
+                    "JSON.stringify()",
+                    "JSON.object()",
+                    "JSON.toText()"
+                ],
+                correct: 1,
+                explanation: "JSON.stringify() converts a JavaScript value into a JSON-formatted string."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let acceptingAnswers = true;
+        let timeLeft = 30;
+        let timerInterval;
+        let wrongAnswers = [];
+
+        const startScreen = document.getElementById("start-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const endScreen = document.getElementById("end-screen");
+        const reviewScreen = document.getElementById("review-screen");
+
+        const startBtn = document.getElementById("start-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const reviewBtn = document.getElementById("review-btn");
+        const backBtn = document.getElementById("back-btn");
+        const reviewRestartBtn = document.getElementById("review-restart-btn");
+
+        const questionText = document.getElementById("question-text");
+        const progressText = document.getElementById("progress");
+        const liveScore = document.getElementById("live-score");
+        const timerDisplay = document.getElementById("timer");
+        const progressFill = document.getElementById("progress-fill");
+        const explanationBox = document.getElementById("explanation");
+
+        const scoreDisplay = document.getElementById("score");
+        const ratingDisplay = document.getElementById("rating");
+        const reviewList = document.getElementById("review-list");
+
+        const optionButtons = document.querySelectorAll(".option-btn");
+
+        document.getElementById("total-questions").innerText = quizData.length;
+
+        startBtn.addEventListener("click", startQuiz);
+        restartBtn.addEventListener("click", startQuiz);
+        reviewRestartBtn.addEventListener("click", startQuiz);
+        reviewBtn.addEventListener("click", showReview);
+        backBtn.addEventListener("click", showResults);
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        optionButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (!acceptingAnswers) return;
+
+                const selectedAnswer = Number(button.dataset.index);
+
+                checkAnswer(selectedAnswer);
+            });
+        });
+
+        function startQuiz() {
+            clearInterval(timerInterval);
+
+            currentQuestionIndex = 0;
+            score = 0;
+            wrongAnswers = [];
+
+            startScreen.classList.add("hide");
+            endScreen.classList.add("hide");
+            reviewScreen.classList.add("hide");
+            quizScreen.classList.remove("hide");
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            clearInterval(timerInterval);
+
+            acceptingAnswers = true;
+            timeLeft = 30;
+
+            nextBtn.classList.add("hide");
+            explanationBox.classList.add("hide");
+            explanationBox.innerHTML = "";
+
+            optionButtons.forEach(button => {
+                button.classList.remove("correct", "wrong");
+                button.disabled = false;
+            });
+
+            const question = quizData[currentQuestionIndex];
+
+            progressText.innerText =
+                `Q ${currentQuestionIndex + 1}/${quizData.length}`;
+
+            liveScore.innerText = `Score: ${score}`;
+
+            progressFill.style.width =
+                `${(currentQuestionIndex / quizData.length) * 100}%`;
+
+            questionText.innerText = question.question;
+
+            optionButtons.forEach((button, index) => {
+                button.innerText = question.options[index];
+            });
+
+            updateTimer();
+            timerInterval = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            if (!acceptingAnswers) return;
+
+            timeLeft--;
+            updateTimer();
+
+            if (timeLeft <= 0) {
+                checkAnswer(-1);
+            }
+        }
+
+        function updateTimer() {
+            timerDisplay.innerText = `${timeLeft}s`;
+
+            if (timeLeft <= 10) {
+                timerDisplay.classList.add("danger");
+            } else {
+                timerDisplay.classList.remove("danger");
+            }
+        }
+
+        function checkAnswer(selectedAnswer) {
+            if (!acceptingAnswers) return;
+
+            acceptingAnswers = false;
+            clearInterval(timerInterval);
+
+            const question = quizData[currentQuestionIndex];
+            const isCorrect = selectedAnswer === question.correct;
+
+            if (isCorrect) {
+                score++;
+            } else {
+                wrongAnswers.push({
+                    question: question.question,
+                    options: question.options,
+                    correct: question.correct,
+                    selected: selectedAnswer,
+                    explanation: question.explanation
+                });
+            }
+
+            optionButtons.forEach((button, index) => {
+                button.disabled = true;
+
+                if (index === question.correct) {
+                    button.classList.add("correct");
+                }
+
+                if (index === selectedAnswer && !isCorrect) {
+                    button.classList.add("wrong");
+                }
+            });
+
+            liveScore.innerText = `Score: ${score}`;
+
+            let message = "";
+
+            if (selectedAnswer === -1) {
+                message = "<strong>Time's up!</strong> ";
+            } else if (isCorrect) {
+                message = "<strong>Correct answer!</strong> ";
+            } else {
+                message = "<strong>Incorrect answer.</strong> ";
+            }
+
+            message += question.explanation;
+
+            explanationBox.innerHTML = message;
+            explanationBox.classList.remove("hide");
+
+            nextBtn.innerText =
+                currentQuestionIndex === quizData.length - 1
+                    ? "View Results"
+                    : "Next Question";
+
+            nextBtn.classList.remove("hide");
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+
+            quizScreen.classList.add("hide");
+            startScreen.classList.add("hide");
+            reviewScreen.classList.add("hide");
+            endScreen.classList.remove("hide");
+
+            progressFill.style.width = "100%";
+
+            scoreDisplay.innerText = `${score} / ${quizData.length}`;
+
+            const percentage = (score / quizData.length) * 100;
+
+            if (percentage >= 90) {
+                ratingDisplay.innerText = "Excellent! Outstanding performance!";
+            } else if (percentage >= 70) {
+                ratingDisplay.innerText = "Great job! You know your stuff!";
+            } else if (percentage >= 50) {
+                ratingDisplay.innerText = "Good effort! Keep practicing!";
+            } else {
+                ratingDisplay.innerText = "Keep learning! You will improve!";
+            }
+
+            reviewBtn.innerText =
+                wrongAnswers.length === 0
+                    ? "No Wrong Answers! Review"
+                    : `Review Wrong Answers (${wrongAnswers.length})`;
+        }
+
+        function showReview() {
+            endScreen.classList.add("hide");
+            quizScreen.classList.add("hide");
+            reviewScreen.classList.remove("hide");
+
+            reviewList.innerHTML = "";
+
+            if (wrongAnswers.length === 0) {
+                reviewList.innerHTML = `
+                    <div class="review-item" style="border-color: #10b981;">
+                        <h3>Perfect Score!</h3>
+                        <p>You answered every question correctly.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            wrongAnswers.forEach((item, index) => {
+                const yourAnswer = item.selected === -1
+                    ? "Not answered (time expired)"
+                    : item.options[item.selected];
+
+                const correctAnswer = item.options[item.correct];
+
+                const reviewItem = document.createElement("div");
+                reviewItem.className = "review-item";
+
+                const heading = document.createElement("h3");
+                heading.innerText = `${index + 1}. ${item.question}`;
+
+                const yourAnswerText = document.createElement("p");
+                yourAnswerText.className = "your-answer";
+                yourAnswerText.innerText = `Your answer: ${yourAnswer}`;
+
+                const correctAnswerText = document.createElement("p");
+                correctAnswerText.className = "correct-answer";
+                correctAnswerText.innerText = `Correct answer: ${correctAnswer}`;
+
+                const explanationText = document.createElement("p");
+                explanationText.innerText = `Explanation: ${item.explanation}`;
+
+                reviewItem.append(
+                    heading,
+                    yourAnswerText,
+                    correctAnswerText,
+                    explanationText
+                );
+
+                reviewList.appendChild(reviewItem);
+            });
+        }
+    </script>
+
+</body>
+</html>

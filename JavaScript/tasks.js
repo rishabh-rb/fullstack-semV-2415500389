@@ -97,3 +97,47 @@ function shoppingcart(cart){
     return total;
 }
 console.log("Total: " + shoppingcart([10, 20, 30, 40, 50]));
+
+12.//book inventory 
+let book = {
+    title: "october Junction",
+    author: "Rishabh Barnwal",
+    isRead: false
+};
+
+if (book.isRead) {
+    console.log(`You have read ${book.title} by ${book.author}.`);
+} else {
+    console.log(`You have not read ${book.title} by ${book.author}.`);
+}
+
+13.//object array finder
+let books = [
+    { title: "The Great Gatsby", author: "F. Scott Fitzgerald"},
+    { title: "To Kill a Mockingbird", author: "Harper Lee"},
+    { title: "1984", author: "George Orwell" }
+];
+let foundBook = books.find(book => book.author === "Harper Lee");
+if (foundBook) {
+    console.log(`Found book: ${foundBook.title} by ${foundBook.author}`);
+} else {
+    console.log("Book not found");
+}
+
+14.//random dice roller
+let dice = Math.floor(Math.random() * 6) + 1;
+console.log("You rolled a " + dice);
+
+15.//vowel counter: write a fun that loop through a string and counts the number of vowels in it.
+function countVowels(str) {
+    let count = 0;
+    let vowels = "aeiouAEIOU";
+    for (let char of str) {
+        if (vowels.includes(char)) {
+            count++;
+        }
+    }
+    return count;
+}
+let inputString = "Hello World";
+console.log("Number of vowels in '" + inputString + "': " + countVowels(inputString));

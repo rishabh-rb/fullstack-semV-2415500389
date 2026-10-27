@@ -33,10 +33,11 @@
 
 
 
-var myArr =[1, "GLA", true];
-console.log(myArr[2]);
-console.log(myArr.length);
+// var myArr =[1, "GLA", true];
+// console.log(myArr[2]);
+// console.log(myArr.length);
 
-console.log(myArr[(myArr.length-2)]);
+// console.log(myArr[(myArr.length-2)]);
+
 
 
