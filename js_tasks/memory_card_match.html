@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Match</title>
+  <style>
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(4, 65px);
+      gap: 8px;
+    }
+    .card { height: 65px; font-size: 25px; }
+  </style>
+</head>
+<body>
+  <h2>Memory Card Match</h2>
+  <p>Find all 8 matching pairs.</p>
+  <p>Moves: <span id="moves">0</span></p>
+  <div id="grid"></div>
+  <p id="message"></p>
+  <button onclick="startGame()">Restart</button>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const symbols = ["🍎", "🍌", "🍇", "🍒",
+                     "🍋", "🍉", "🥝", "🍓"];
+    let first = null, lock = false, moves = 0, matched = 0;
+
+    function startGame() {
+      grid.innerHTML = "";
+      first = null;
+      lock = false;
+      moves = 0;
+      matched = 0;
+      document.getElementById("moves").textContent = 0;
+      document.getElementById("message").textContent = "";
+
+      const cards = [...symbols, ...symbols];
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+
+      cards.forEach(symbol => {
+        const card = document.createElement("button");
+        card.className = "card";
+        card.dataset.symbol = symbol;
+        card.textContent = "?";
+        grid.appendChild(card);
+      });
+    }
+
+    grid.addEventListener("click", event => {
+      const card = event.target.closest(".card");
+      if (!card || lock || card.disabled ||
+          card === first || card.textContent !== "?") return;
+
+      card.textContent = card.dataset.symbol;
+
+      if (!first) {
+        first = card;
+        return;
+      }
+
+      moves++;
+      document.getElementById("moves").textContent = moves;
+
+      if (first.dataset.symbol === card.dataset.symbol) {
+        first.disabled = true;
+        card.disabled = true;
+        first = null;
+        matched++;
+
+        if (matched === 8) {
+          document.getElementById("message").textContent =
+            "Congratulations! All pairs matched.";
+        }
+      } else {
+        const previous = first;
+        first = null;
+        lock = true;
+
+        setTimeout(() => {
+          previous.textContent = "?";
+          card.textContent = "?";
+          lock = false;
+        }, 1000);
+      }
+    });
+
+    startGame();
+  </script>
+</body>
+</html>

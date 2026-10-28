@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodge the Obstacles</title>
+  <style>
+    #road {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background: #ddd;
+      overflow: hidden;
+    }
+    .player, .block {
+      position: absolute;
+      width: 60px;
+      height: 40px;
+    }
+    .player { bottom: 10px; background: royalblue; }
+    .block { background: crimson; }
+  </style>
+</head>
+<body>
+  <h2>Dodge the Obstacles</h2>
+  <p>Score: <span id="score">0</span></p>
+  <div id="road"><div class="player" id="player"></div></div>
+  <p id="message">Use left and right arrows.</p>
+  <button onclick="startGame()">Restart</button>
+
+  <script>
+    const road = document.getElementById("road");
+    const player = document.getElementById("player");
+    const laneX = [10, 120, 230];
+    let lane = 1, blocks = [], score = 0, speed = 3;
+    let playing = false, loop, spawner, difficulty;
+
+    document.addEventListener("keydown", e => {
+      if (!playing) return;
+      if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a")
+        lane = Math.max(0, lane - 1);
+      else if (e.key === "ArrowRight" || e.key.toLowerCase() === "d")
+        lane = Math.min(2, lane + 1);
+      else return;
+
+      player.style.left = laneX[lane] + "px";
+    });
+
+    function endGame() {
+      playing = false;
+      clearInterval(loop);
+      clearInterval(spawner);
+      clearInterval(difficulty);
+      document.getElementById("message").textContent =
+        "Game over! Score: " + score;
+    }
+
+    function startGame() {
+      clearInterval(loop);
+      clearInterval(spawner);
+      clearInterval(difficulty);
+      blocks.forEach(b => b.el.remove());
+      blocks = [];
+      score = 0;
+      speed = 3;
+      lane = 1;
+      player.style.left = laneX[lane] + "px";
+      document.getElementById("score").textContent = 0;
+      document.getElementById("message").textContent = "";
+      playing = true;
+
+      spawner = setInterval(() => {
+        const el = document.createElement("div");
+        el.className = "block";
+        const l = Math.floor(Math.random() * 3);
+        el.style.left = laneX[l] + "px";
+        el.style.top = "-40px";
+        road.appendChild(el);
+        blocks.push({ el, lane: l, y: -40 });
+      }, 800);
+
+      difficulty = setInterval(() => speed += 1, 10000);
+
+      loop = setInterval(() => {
+        for (let i = blocks.length - 1; i >= 0; i--) {
+          const b = blocks[i];
+          b.y += speed;
+          b.el.style.top = b.y + "px";
+
+          const a = player.getBoundingClientRect();
+          const c = b.el.getBoundingClientRect();
+
+          if (a.left < c.right && a.right > c.left &&
+              a.top < c.bottom && a.bottom > c.top) {
+            endGame();
+            return;
+          }
+
+          if (b.y > road.clientHeight) {
+            b.el.remove();
+            blocks.splice(i, 1);
+            score++;
+            document.getElementById("score").textContent = score;
+          }
+        }
+      }, 30);
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

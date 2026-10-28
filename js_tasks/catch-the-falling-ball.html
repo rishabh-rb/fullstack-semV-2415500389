@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch the Ball</title>
+  <style>
+    #arena {
+      width: 350px;
+      height: 400px;
+      background: #eee;
+      position: relative;
+      overflow: hidden;
+    }
+    .ball {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: crimson;
+      position: absolute;
+    }
+    #basket {
+      position: absolute;
+      bottom: 10px;
+      left: 145px;
+      width: 60px;
+      height: 15px;
+      background: royalblue;
+    }
+  </style>
+</head>
+<body>
+  <h2>Catch the Falling Ball</h2>
+  <p>Score: <span id="score">0</span> |
+     Misses: <span id="misses">0</span>/3</p>
+  <div id="arena">
+    <div id="basket"></div>
+  </div>
+  <p id="message">Use the left and right arrow keys.</p>
+  <button onclick="startGame()">Restart</button>
+
+  <script>
+    const arena = document.getElementById("arena");
+    const basket = document.getElementById("basket");
+    let balls = [], score = 0, misses = 0;
+    let x = 145, playing = false, timer;
+
+    document.addEventListener("keydown", e => {
+      if (!playing) return;
+      if (e.key === "ArrowLeft") x -= 20;
+      if (e.key === "ArrowRight") x += 20;
+      x = Math.max(0, Math.min(x, arena.clientWidth - 60));
+      basket.style.left = x + "px";
+    });
+
+    function startGame() {
+      clearInterval(timer);
+      balls.forEach(b => b.el.remove());
+      balls = [];
+      score = 0;
+      misses = 0;
+      x = 145;
+      basket.style.left = x + "px";
+      document.getElementById("score").textContent = 0;
+      document.getElementById("misses").textContent = 0;
+      document.getElementById("message").textContent = "";
+      playing = true;
+
+      timer = setInterval(() => {
+        if (Math.random() < 0.08) {
+          const el = document.createElement("div");
+          el.className = "ball";
+          el.style.left = Math.random() *
+            (arena.clientWidth - 24) + "px";
+          el.style.top = "0px";
+          arena.appendChild(el);
+          balls.push({ el, y: 0 });
+        }
+
+        const basketLeft = basket.offsetLeft;
+        const basketTop = basket.offsetTop;
+
+        for (let i = balls.length - 1; i >= 0; i--) {
+          const b = balls[i];
+          b.y += 4;
+          b.el.style.top = b.y + "px";
+
+          const ballLeft = b.el.offsetLeft;
+          const ballRight = ballLeft + 24;
+          const ballBottom = b.y + 24;
+
+          if (ballBottom >= basketTop && b.y < basketTop + 15 &&
+              ballRight > basketLeft && ballLeft < basketLeft + 60) {
+            score++;
+            document.getElementById("score").textContent = score;
+            b.el.remove();
+            balls.splice(i, 1);
+          } else if (b.y > arena.clientHeight) {
+            misses++;
+            document.getElementById("misses").textContent = misses;
+            b.el.remove();
+            balls.splice(i, 1);
+          }
+        }
+
+        if (misses >= 3) {
+          playing = false;
+          clearInterval(timer);
+          document.getElementById("message").textContent =
+            "Game over! Final score: " + score;
+          balls.forEach(b => b.el.remove());
+          balls = [];
+        }
+      }, 30);
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

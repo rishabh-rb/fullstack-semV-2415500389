@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess the Number</title>
+</head>
+<body>
+  <h2>Guess the Number (1–100)</h2>
+  <p>You have 7 attempts.</p>
+  <input type="number" id="guess" min="1" max="100"
+         placeholder="Enter a number">
+  <button id="check">Guess</button>
+  <button onclick="restart()">Restart</button>
+  <p id="message">Start guessing!</p>
+  <p id="left">Attempts left: 7</p>
+
+  <script>
+    let answer, attempts, gameOver;
+
+    function restart() {
+      answer = Math.floor(Math.random() * 100) + 1;
+      attempts = 7;
+      gameOver = false;
+      document.getElementById("guess").disabled = false;
+      document.getElementById("check").disabled = false;
+      document.getElementById("guess").value = "";
+      document.getElementById("message").textContent = "Start guessing!";
+      document.getElementById("left").textContent = "Attempts left: 7";
+    }
+
+    document.getElementById("check").onclick = function () {
+      if (gameOver) return;
+
+      const input = document.getElementById("guess");
+      const n = Number(input.value);
+
+      if (input.value.trim() === "" || n < 1 || n > 100) {
+        document.getElementById("message").textContent =
+          "Enter a number from 1 to 100.";
+        return;
+      }
+
+      attempts--;
+
+      if (n === answer) {
+        document.getElementById("message").textContent = "Correct! You won!";
+        gameOver = true;
+      } else if (n > answer) {
+        document.getElementById("message").textContent = "Too high!";
+      } else {
+        document.getElementById("message").textContent = "Too low!";
+      }
+
+      document.getElementById("left").textContent =
+        "Attempts left: " + attempts;
+
+      if (attempts === 0 && !gameOver) {
+        document.getElementById("message").textContent =
+          "Game over! The number was " + answer;
+        gameOver = true;
+      }
+
+      if (gameOver) {
+        input.disabled = true;
+        document.getElementById("check").disabled = true;
+      }
+    };
+
+    restart();
+  </script>
+</body>
+</html>

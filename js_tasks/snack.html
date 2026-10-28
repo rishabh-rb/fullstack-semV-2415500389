@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snake Game</title>
+  <style>
+    canvas { border: 2px solid black; background: #eee; }
+  </style>
+</head>
+<body>
+  <h2>Snake Game</h2>
+  <p>Score: <span id="score">0</span></p>
+  <canvas id="game" width="400" height="400"></canvas>
+  <p id="message">Use arrow keys to move.</p>
+  <button onclick="startGame()">Restart</button>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const cell = 20, size = 20;
+
+    let snake, food, direction, nextDirection, score, playing, timer;
+
+    function randomFood() {
+      let p;
+      do {
+        p = {
+          x: Math.floor(Math.random() * size),
+          y: Math.floor(Math.random() * size)
+        };
+      } while (snake.some(s => s.x === p.x && s.y === p.y));
+      return p;
+    }
+
+    function startGame() {
+      clearInterval(timer);
+      snake = [{ x: 10, y: 10 }];
+      direction = { x: 1, y: 0 };
+      nextDirection = { ...direction };
+      score = 0;
+      food = randomFood();
+      playing = true;
+
+      document.getElementById("score").textContent = 0;
+      document.getElementById("message").textContent =
+        "Use arrow keys to move.";
+
+      draw();
+      timer = setInterval(move, 120);
+    }
+
+    document.addEventListener("keydown", e => {
+      const keys = {
+        ArrowUp: { x: 0, y: -1 },
+        ArrowDown: { x: 0, y: 1 },
+        ArrowLeft: { x: -1, y: 0 },
+        ArrowRight: { x: 1, y: 0 }
+      };
+
+      if (!keys[e.key]) return;
+      e.preventDefault();
+
+      const d = keys[e.key];
+      if (d.x === -direction.x && d.y === -direction.y) return;
+      nextDirection = d;
+    });
+
+    function move() {
+      direction = { ...nextDirection };
+
+      const head = {
+        x: snake[0].x + direction.x,
+        y: snake[0].y + direction.y
+      };
+
+      const eating = head.x === food.x && head.y === food.y;
+      const body = eating ? snake : snake.slice(0, -1);
+
+      if (
+        head.x < 0 || head.x >= size ||
+        head.y < 0 || head.y >= size ||
+        body.some(s => s.x === head.x && s.y === head.y)
+      ) {
+        playing = false;
+        clearInterval(timer);
+        document.getElementById("message").textContent =
+          "Game over! Score: " + score;
+        draw();
+        return;
+      }
+
+      snake.unshift(head);
+
+      if (eating) {
+        score++;
+        document.getElementById("score").textContent = score;
+        food = randomFood();
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x * cell, food.y * cell, cell, cell);
+
+      ctx.fillStyle = "green";
+      snake.forEach(s => {
+        ctx.fillRect(s.x * cell, s.y * cell, cell - 1, cell - 1);
+      });
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

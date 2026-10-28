@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rock Paper Scissors</title>
+</head>
+<body>
+  <h2>Rock Paper Scissors</h2>
+  <p>You: <span id="you">0</span> | Computer:
+     <span id="computer">0</span></p>
+
+  <button data-choice="rock">Rock</button>
+  <button data-choice="paper">Paper</button>
+  <button data-choice="scissors">Scissors</button>
+
+  <h3 id="result">First to 5 wins!</h3>
+  <button id="again" hidden>Play Again</button>
+
+  <script>
+    let you = 0, computer = 0, finished = false;
+    const choices = ["rock", "paper", "scissors"];
+
+    document.querySelectorAll("[data-choice]").forEach(button => {
+      button.addEventListener("click", function () {
+        if (finished) return;
+
+        const player = this.dataset.choice;
+        const cpu = choices[Math.floor(Math.random() * 3)];
+        let message;
+
+        switch (player) {
+          case cpu:
+            message = "Draw!";
+            break;
+          case "rock":
+            message = cpu === "scissors" ? "You win this round!" :
+                                           "Computer wins this round!";
+            break;
+          case "paper":
+            message = cpu === "rock" ? "You win this round!" :
+                                       "Computer wins this round!";
+            break;
+          case "scissors":
+            message = cpu === "paper" ? "You win this round!" :
+                                        "Computer wins this round!";
+            break;
+        }
+
+        if (player !== cpu) {
+          if (
+            (player === "rock" && cpu === "scissors") ||
+            (player === "paper" && cpu === "rock") ||
+            (player === "scissors" && cpu === "paper")
+          ) you++;
+          else computer++;
+        }
+
+        document.getElementById("you").textContent = you;
+        document.getElementById("computer").textContent = computer;
+        document.getElementById("result").textContent =
+          `You chose ${player}; computer chose ${cpu}. ${message}`;
+
+        if (you === 5 || computer === 5) {
+          finished = true;
+          document.getElementById("result").textContent +=
+            you === 5 ? " You won the game!" : " Computer won the game!";
+          document.getElementById("again").hidden = false;
+        }
+      });
+    });
+
+    document.getElementById("again").onclick = () => {
+      you = 0;
+      computer = 0;
+      finished = false;
+      document.getElementById("you").textContent = "0";
+      document.getElementById("computer").textContent = "0";
+      document.getElementById("result").textContent = "First to 5 wins!";
+      document.getElementById("again").hidden = true;
+    };
+  </script>
+</body>
+</html>

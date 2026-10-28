@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Move the Box</title>
+  <style>
+    #arena {
+      width: 400px;
+      height: 300px;
+      border: 2px solid black;
+      position: relative;
+      overflow: hidden;
+    }
+    #player, #goal {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+    }
+    #player { background: royalblue; left: 0; top: 0; }
+    #goal { background: limegreen; right: 0; bottom: 0; }
+  </style>
+</head>
+<body>
+  <h2>Move the Box</h2>
+  <p>Use arrow keys or WASD to reach the green goal.</p>
+  <div id="arena">
+    <div id="player"></div>
+    <div id="goal"></div>
+  </div>
+  <p id="message"></p>
+
+  <script>
+    const player = document.getElementById("player");
+    const arena = document.getElementById("arena");
+    const goal = document.getElementById("goal");
+    let x = 0, y = 0, won = false;
+
+    document.addEventListener("keydown", event => {
+      let key = event.key.toLowerCase();
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright"]
+          .includes(key)) event.preventDefault();
+      if (won) return;
+
+      switch (key) {
+        case "arrowup":
+        case "w": y -= 10; break;
+        case "arrowdown":
+        case "s": y += 10; break;
+        case "arrowleft":
+        case "a": x -= 10; break;
+        case "arrowright":
+        case "d": x += 10; break;
+        default: return;
+      }
+
+      x = Math.max(0, Math.min(x, arena.clientWidth - player.offsetWidth));
+      y = Math.max(0, Math.min(y, arena.clientHeight - player.offsetHeight));
+
+      player.style.left = x + "px";
+      player.style.top = y + "px";
+
+      const a = player.getBoundingClientRect();
+      const b = goal.getBoundingClientRect();
+
+      if (a.left < b.right && a.right > b.left &&
+          a.top < b.bottom && a.bottom > b.top) {
+        document.getElementById("message").textContent = "You reached the goal!";
+        won = true;
+      }
+    });
+  </script>
+</body>
+</html>

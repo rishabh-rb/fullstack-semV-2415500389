@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Single Player Pong</title>
+  <style>
+    canvas {
+      background: #111;
+      display: block;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h2>Single Player Pong</h2>
+  <p>Move the paddle with your mouse or arrow keys.</p>
+  <canvas id="game" width="500" height="300"></canvas>
+  <p>Score: <span id="score">0</span></p>
+  <button onclick="startGame()">Restart</button>
+  <p id="message"></p>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    let ballX, ballY, dx, dy, paddleX, score, playing, frame;
+
+    function startGame() {
+      cancelAnimationFrame(frame);
+      ballX = 250;
+      ballY = 150;
+      dx = 3;
+      dy = 3;
+      paddleX = 200;
+      score = 0;
+      playing = true;
+      document.getElementById("score").textContent = 0;
+      document.getElementById("message").textContent = "";
+      draw();
+    }
+
+    canvas.addEventListener("mousemove", e => {
+      const rect = canvas.getBoundingClientRect();
+      paddleX = (e.clientX - rect.left) *
+        canvas.width / rect.width - 50;
+      paddleX = Math.max(0, Math.min(400, paddleX));
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") paddleX -= 20;
+      if (e.key === "ArrowRight") paddleX += 20;
+      paddleX = Math.max(0, Math.min(400, paddleX));
+    });
+
+    function draw() {
+      if (!playing) return;
+
+      ctx.clearRect(0, 0, 500, 300);
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(paddleX, 275, 100, 10);
+
+      ballX += dx;
+      ballY += dy;
+
+      if (ballX <= 8 || ballX >= 492) dx *= -1;
+      if (ballY <= 8) dy *= -1;
+
+      if (dy > 0 && ballY + 8 >= 275 &&
+          ballY - 8 < 285 &&
+          ballX >= paddleX && ballX <= paddleX + 100) {
+        dy = -Math.abs(dy);
+        score++;
+        document.getElementById("score").textContent = score;
+      }
+
+      if (ballY > 308) {
+        playing = false;
+        document.getElementById("message").textContent =
+          "Game over! Final score: " + score;
+        return;
+      }
+
+      frame = requestAnimationFrame(draw);
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
